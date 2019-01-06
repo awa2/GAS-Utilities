@@ -1,0 +1,24 @@
+{
+  "name": "@ts-modules-for-gas/gas-utilities",
+  "version": "0.0.1",
+  "description": "## AutoFoldering Making annually or monthly named folder on your Google Drive such as below: ``` RootFolder  |- 2017  `- 2018     |- 01     |- 02     |- 03     `- 04 <= YOUR_APRIL_LOGS         |- 2018-04-01_foo.logs         |- 2018-04-02_foo.logs                 : ``` ### Example ```TypeScript const rootFolderId = '<YOUR_ROOT_FOLDER_ID>'; const LogFolder = new AutoFolderApp(reportRootFolderId).setYear(2018).setMonth(04).getReportFolder();",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awa2/GAS-Utilities.git"
+  },
+  "author": "awa2 <takanori.awatsu+npm@gmail.com> (Takanori Awatsu)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awa2/GAS-Utilities/issues"
+  },
+  "homepage": "https://github.com/awa2/GAS-Utilities#readme"
+}
