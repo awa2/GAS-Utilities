@@ -16,8 +16,9 @@ RootFolder
 ```
 ### Example
 ```TypeScript
+import AutoFoldering from 'AutoFoldering';
 const rootFolderId = '<YOUR_ROOT_FOLDER_ID>';
-const LogFolder = new AutoFolderApp(reportRootFolderId).setYear(2018).setMonth(04).getReportFolder();
+const LogFolder = new AutoFoldering(reportRootFolderId,'JST').setYear(2018).setMonth(04).getReportFolder();
 
 console.log(LogFolder.getId());
 ```
@@ -25,3 +26,4 @@ console.log(LogFolder.getId());
 Event class on submit of Google Spreadsheet, Form and etc.
 
 ## Process
+Some utility service for Google Apps 

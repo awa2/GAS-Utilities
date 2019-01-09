@@ -7,9 +7,10 @@ export default class AutoFoldering {
     YearFolder: GoogleAppsScript.Drive.Folder;
     MonthFolder: GoogleAppsScript.Drive.Folder;
 
-    constructor(rootFolderId: string) {
-        this.Year = Utilities.formatDate(new Date(), "JST", "yyyy");
-        this.Month = Utilities.formatDate(new Date(), "JST", "MM");
+    constructor(rootFolderId: string, timezone?: string) {
+        if(!timezone){ timezone = "JST" };
+        this.Year = Utilities.formatDate(new Date(), timezone, "yyyy");
+        this.Month = Utilities.formatDate(new Date(), timezone, "MM");
 
         this.rootFolderId = rootFolderId;
         this.RootFolder = DriveApp.getFolderById(rootFolderId);

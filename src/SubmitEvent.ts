@@ -33,7 +33,7 @@ export class SubmitEvent {
     public responses: EventObject.FormResponse[];
     constructor(e: EventObject.Spreadsheet.onSubmit | EventObject.Form.onSubmit, asNames: string[]) {
         this.body = {};
-        if (e['response']) {
+        if ((e as {[key:string]:any})['response']) {
             const event = e as EventObject.Form.onSubmit;
             this.email = event.response.getRespondentEmail();
             this.responses = event.response.getItemResponses().map((itemReponse, i) => {

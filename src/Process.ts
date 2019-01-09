@@ -1,4 +1,4 @@
-class Process {
+export class Process {
     public id: string = ScriptApp.getScriptId();
     public env: { [key: string]: Object };
 
@@ -64,7 +64,7 @@ class Process {
     }
 }
 
-class EventStore {
+export class EventStore {
     private e: string;
     constructor() {
         this.e = JSON.stringify({});
@@ -83,7 +83,3 @@ class EventStore {
         }
     }
 }
-
-const process = new Process();
-
-export default process;
