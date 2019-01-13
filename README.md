@@ -1,4 +1,5 @@
 # GAS-Utilities
+This is TypeScript modules for Google Apps Script with `clasp`.
 
 ## AutoFoldering
 Making annually or monthly named folder on your Google Drive such as below:

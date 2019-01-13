@@ -11,9 +11,9 @@ export class Process {
     private reporting: Function = function(){};
 
     public static MODE = class {
-        public static get PRODUCTION(): string { return 'production'; }
-        public static get STAGING(): string { return 'staging'; }
-        public static get DEVELOPMENT(): string { return 'development'; }
+        public static PRODUCTION: string = 'production';
+        public static STAGING: string = 'staging';
+        public static DEVELOPMENT: string = 'development';
     }
 
     constructor(EnvObject?: Object) {
