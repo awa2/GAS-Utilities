@@ -1,9 +1,11 @@
 import AutoFoldering from './AutoFoldering';
 import { Process, EventStore } from './Process';
-import { SubmitEvent, EventObject } from './SubmitEvent';
+import { SubmitEvent } from './SubmitEvent';
+import EventObject from './EventObject';
 const process = new Process();
 
 export { AutoFoldering }
-export { process }
 export { EventStore }
-export { SubmitEvent, EventObject }
+export { SubmitEvent }
+export { EventObject}
+export { process }
