@@ -1,32 +1,4 @@
-
-export namespace EventObject {
-    export namespace Spreadsheet {
-        export type onSubmit = {
-            authMode: GoogleAppsScript.Script.AuthMode;
-            namedValue: { [key: string]: Array<string> };
-            range: GoogleAppsScript.Spreadsheet.Range;
-            triggerUid: number;
-            values: string[];
-        }
-    }
-    export namespace Form {
-        export type onSubmit = {
-            authMode: GoogleAppsScript.Script.AuthMode;
-            response: GoogleAppsScript.Forms.FormResponse;
-            source: GoogleAppsScript.Forms.Form;
-            triggerUid: number;
-        }
-    }
-    export type FormResponse = {
-        title?: string,
-        index?: number,
-        id?: number,
-        type?: GoogleAppsScript.Forms.ItemType,
-        feedback?: Object,
-        score?: Object,
-        response: Object
-    }
-}
+import EventObject from './EventObject';
 export class SubmitEvent {
     public body: { [Key: string]: Object }
     public email: string;
