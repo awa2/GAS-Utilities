@@ -2,7 +2,7 @@ namespace EventObject {
     export namespace Spreadsheet {
         export type onSubmit = {
             authMode: GoogleAppsScript.Script.AuthMode;
-            namedValue: { [key: string]: Array<string> };
+            namedValues: { [key: string]: Array<string> };
             range: GoogleAppsScript.Spreadsheet.Range;
             triggerUid: number;
             values: string[];

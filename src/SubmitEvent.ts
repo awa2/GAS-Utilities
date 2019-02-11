@@ -50,7 +50,7 @@ export class SubmitEvent {
                 })
             } else {
                 (names as Definition[]).forEach((name,i) => {
-                    const value = event.namedValue[name.title];
+                    const value = event.namedValues[name.title];
                     if(value){
                         switch (value.length) {
                             case 0: this.body[name.key] = name.isArray ? [] : ''; break;
