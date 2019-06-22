@@ -1,48 +1,43 @@
+export class EventStore {
+    private e: string;
+    constructor() {
+        this.e = JSON.stringify({});
+    }
+    public store(e: Object) {
+        this.e = JSON.stringify(e);
+        PropertiesService.getUserProperties().setProperty(ScriptApp.getScriptId(), this.e);
+    }
+    public load() {
+        const e = PropertiesService.getUserProperties().getProperty(ScriptApp.getScriptId());
+        if (e) {
+            this.e = e;
+            return JSON.parse(e);
+        } else {
+            return {};
+        }
+    }
+}
+
 export class Process {
-    public id: string = ScriptApp.getScriptId();
-    public env: { [key: string]: Object };
+    public static id: string = ScriptApp.getScriptId();
+    public static env: { [key: string]: Object } = {};
 
-    public CurrentUser: { email: string } = { email: Session.getActiveUser().getEmail() };
-    public EffectiveUser: { email: string, access_token?: string } = { email: Session.getActiveUser().getEmail(), access_token: ScriptApp.getOAuthToken() };
+    public static CurrentUser: { email: string } = { email: Session.getActiveUser().getEmail() };
+    public static EffectiveUser: { email: string, access_token?: string } = { email: Session.getActiveUser().getEmail(), access_token: ScriptApp.getOAuthToken() };
 
-    public web: { url: string } = { url: ScriptApp.getService().isEnabled() ? ScriptApp.getService().getUrl() : '' };
-    public event: EventStore;
-    public mode: string = Process.MODE.PRODUCTION;
-    private reporting: Function = function(){};
-
-    public static MODE = class {
-        public static PRODUCTION: string = 'production';
-        public static STAGING: string = 'staging';
-        public static DEVELOPMENT: string = 'development';
+    public static web: { url: string } = { url: ScriptApp.getService().isEnabled() ? ScriptApp.getService().getUrl() : '' };
+    public static event: EventStore = new EventStore();
+    public static MODE = {
+        PRODUCTION: 'production',
+        STAGING: 'staging',
+        DEVELOPMENT: 'development'
     }
-
-    constructor(EnvObject?: Object) {
-        if (EnvObject) {
-            PropertiesService.getScriptProperties().setProperties(EnvObject, false);
-        }
-
-        this.env = {};
-
-        const properties = PropertiesService.getScriptProperties().getProperties();
-        for (const key in properties) {
-            if (properties.hasOwnProperty(key)) {
-                const property = (properties as {[key: string]: any})[key];
-                try {
-                    this.env[key] = JSON.parse(property);
-                } catch (e) {
-                    this.env[key] = property;
-                }
-            }
-        }
-
-        this.event = new EventStore();
-    }
-
-    public log(obj: Object) {
+    public static mode: string = Process.MODE.PRODUCTION;
+    public static log(obj: Object) {
         console.log(obj);
         Logger.log(JSON.stringify(obj, null, 2));
     }
-    public debug(obj: Object) {
+    public static debug(obj: Object) {
         switch (this.mode) {
             case Process.MODE.PRODUCTION:
                 break;
@@ -59,27 +54,16 @@ export class Process {
                 break;
         }
     }
-    public setReportTo(func: Function){
-        this.reporting = func;
-    }
 }
 
-export class EventStore {
-    private e: string;
-    constructor() {
-        this.e = JSON.stringify({});
-    }
-    public store(e: Object) {
-        this.e = JSON.stringify(e);
-        PropertiesService.getUserProperties().setProperty(ScriptApp.getScriptId(),this.e);
-    }
-    public load() {
-        const e = PropertiesService.getUserProperties().getProperty(ScriptApp.getScriptId());
-        if(e){
-            this.e = e;
-            return JSON.parse(e);
-        } else {
-            return {};
+const properties = PropertiesService.getScriptProperties().getProperties();
+for (const key in properties) {
+    if (properties.hasOwnProperty(key)) {
+        const property = (properties as { [key: string]: any })[key];
+        try {
+            Process.env[key] = JSON.parse(property);
+        } catch (e) {
+            Process.env[key] = property;
         }
     }
 }
