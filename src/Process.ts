@@ -54,6 +54,9 @@ export class process {
                 break;
         }
     }
+    public static save(){
+        PropertiesService.getScriptProperties().setProperties(process.env ,false);
+    }
 }
 
 const properties = PropertiesService.getScriptProperties().getProperties();
