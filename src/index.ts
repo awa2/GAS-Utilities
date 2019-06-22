@@ -1,7 +1,7 @@
 import AutoFoldering from './AutoFoldering';
 import { Process, EventStore } from './Process';
 import { SubmitEvent } from './SubmitEvent';
-import EventObject from './EventObject';
+import EventObject from './types/EventObject';
 import ConfigTemplate from './Config';
 const process = new Process();
 

@@ -1,4 +1,4 @@
-import EventObject from './EventObject';
+import EventObject from './types/EventObject';
 export class SubmitEvent {
     public body: { [Key: string]: Object }
     public email: string;
