@@ -18,7 +18,7 @@ export class EventStore {
     }
 }
 
-export class Process {
+export class process {
     public static id: string = ScriptApp.getScriptId();
     public static env: { [key: string]: Object } = {};
 
@@ -32,20 +32,20 @@ export class Process {
         STAGING: 'staging',
         DEVELOPMENT: 'development'
     }
-    public static mode: string = Process.MODE.PRODUCTION;
+    public static mode: string = process.MODE.PRODUCTION;
     public static log(obj: Object) {
         console.log(obj);
         Logger.log(JSON.stringify(obj, null, 2));
     }
     public static debug(obj: Object) {
         switch (this.mode) {
-            case Process.MODE.PRODUCTION:
+            case process.MODE.PRODUCTION:
                 break;
-            case Process.MODE.STAGING:
+            case process.MODE.STAGING:
                 console.log(obj);
                 Logger.log(JSON.stringify(obj, null, 2));
                 break;
-            case Process.MODE.DEVELOPMENT:
+            case process.MODE.DEVELOPMENT:
                 console.log(obj);
                 Logger.log(JSON.stringify(obj, null, 2));
                 break;
@@ -61,9 +61,9 @@ for (const key in properties) {
     if (properties.hasOwnProperty(key)) {
         const property = (properties as { [key: string]: any })[key];
         try {
-            Process.env[key] = JSON.parse(property);
+            process.env[key] = JSON.parse(property);
         } catch (e) {
-            Process.env[key] = property;
+            process.env[key] = property;
         }
     }
 }
