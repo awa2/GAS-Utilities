@@ -20,7 +20,7 @@ export class EventStore {
 
 export class process {
     public static id: string = ScriptApp.getScriptId();
-    public static env: { [key: string]: Object|string|number } = {};
+    public static env: { [key: string]: Object | string | number } = {};
 
     public static CurrentUser: { email: string } = { email: Session.getActiveUser().getEmail() };
     public static EffectiveUser: { email: string, access_token?: string } = { email: Session.getActiveUser().getEmail(), access_token: ScriptApp.getOAuthToken() };
@@ -54,8 +54,21 @@ export class process {
                 break;
         }
     }
-    public static save(){
-        PropertiesService.getScriptProperties().setProperties(process.env ,false);
+    public static save() {
+        for (const key in process.env) {
+            const env = process.env[key];
+            switch (typeof env) {
+                case 'function':
+                case 'object':
+                    PropertiesService.getScriptProperties().setProperty(key, JSON.stringify(env));
+                    break;
+                default:
+                    PropertiesService.getScriptProperties().setProperty(key, env.toString());
+                    break;
+            }
+
+        }
+
     }
 }
 
