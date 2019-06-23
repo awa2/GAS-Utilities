@@ -20,7 +20,7 @@ export class EventStore {
 
 export class process {
     public static id: string = ScriptApp.getScriptId();
-    public static env: { [key: string]: Object } = {};
+    public static env: { [key: string]: Object|string|number } = {};
 
     public static CurrentUser: { email: string } = { email: Session.getActiveUser().getEmail() };
     public static EffectiveUser: { email: string, access_token?: string } = { email: Session.getActiveUser().getEmail(), access_token: ScriptApp.getOAuthToken() };
