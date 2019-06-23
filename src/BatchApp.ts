@@ -5,7 +5,9 @@ export default class BatchApp {
     public now = new Date();
     public updated_at: Date;
     public interval: number;
-    constructor(interval?: number) {
+    private functionName: string;
+    constructor(functionName: string, interval?: number) {
+        this.functionName = functionName;
         this.interval = interval ? interval : 5;
         const UPDATED_AT = process.env['BATCH_UPDATED_AT']
         this.updated_at = UPDATED_AT && typeof (UPDATED_AT) === 'string' ? new Date(UPDATED_AT) : new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate(), this.now.getHours(), this.now.getMinutes() - this.interval);
@@ -36,7 +38,7 @@ export default class BatchApp {
     public onCalendarCreated(){
     }
     public end() {
-        const newTrigger = ScriptApp.newTrigger('batchApp').timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
+        const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
         ScriptApp.getScriptTriggers().some(trigger => {
             if (trigger.getUniqueId() === process.env['TRIGGER_ID']) {
                 ScriptApp.deleteTrigger(trigger);
