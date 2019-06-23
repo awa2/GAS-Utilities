@@ -19,7 +19,7 @@ export default class BatchApp {
         const Threads = GmailApp.search(search);
         if (Threads) {
             const Messages = Threads[0].getMessages();
-            const Message = Messages[0];
+            const Message = Messages[Messages.length - 1];
 
             if (process.env[conditionKey] && process.env[conditionKey]['id'] === Message.getId()) {
                 return false;
