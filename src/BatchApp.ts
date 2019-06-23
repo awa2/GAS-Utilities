@@ -39,7 +39,7 @@ export default class BatchApp {
     }
     public end() {
         const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
-        ScriptApp.getScriptTriggers().some(trigger => {
+        ScriptApp.getProjectTriggers().some(trigger => {
             if (trigger.getUniqueId() === process.env['TRIGGER_ID']) {
                 ScriptApp.deleteTrigger(trigger);
                 return true;
