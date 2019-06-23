@@ -15,24 +15,18 @@ export default class BatchApp {
 
     public onGmailReceived(search: string, callback: (latestMessage: GoogleAppsScript.Gmail.GmailMessage) => any) {
         const conditionKey = md5sum(search);
+        const after = this.updated_at.valueOf()/1000
 
-        const Threads = GmailApp.search(search);
-        if (Threads) {
-            const Messages = Threads[0].getMessages();
-            const Message = Messages[Messages.length - 1];
-
-            if (process.env[conditionKey] && process.env[conditionKey]['id'] === Message.getId()) {
-                return false;
-            } else {
-                process.env[conditionKey] = {
-                    condition: search,
-                    id: Message.getId()
+        const Threads = GmailApp.search(`${search} after:${after}`);
+        const rets = Threads.map( Thread => {
+            const Messages = Thread.getMessages();
+            return Messages.map( Message => {
+                if( this.updated_at < Message.getDate()){
+                    return callback(Message);
                 }
-                return callback(Message);
-            }
-        } else {
-            return false;
-        }
+            })
+        });
+        return rets.length;
     }
 
     public onCalendarCreated(){
