@@ -39,14 +39,18 @@ export default class BatchApp {
     }
     public end() {
         const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
+        this.stop();
+        process.env['TRIGGER_ID'] = newTrigger;
+        process.env['BATCH_UPDATED_AT'] = this.now.toISOString();
+        process.save();
+    }
+
+    public stop(){
         ScriptApp.getProjectTriggers().some(trigger => {
             if (trigger.getUniqueId() === process.env['TRIGGER_ID']) {
                 ScriptApp.deleteTrigger(trigger);
                 return true;
             }
         });
-        process.env['TRIGGER_ID'] = newTrigger;
-        process.env['BATCH_UPDATED_AT'] = this.now.toISOString();
-        process.save();
     }
 }
