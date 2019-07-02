@@ -13,6 +13,10 @@ export default class BatchApp {
         this.updated_at = UPDATED_AT && typeof (UPDATED_AT) === 'string' ? new Date(UPDATED_AT) : new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate(), this.now.getHours(), this.now.getMinutes() - this.interval);
     }
 
+    public on( callback: (from: Date, to: Date) => any){
+        return callback(this.updated_at, this.now);
+    }
+
     public onGmailReceived(search: string, callback: (latestMessage: GoogleAppsScript.Gmail.GmailMessage) => any) {
         const conditionKey = md5sum(search);
         const after = this.updated_at.valueOf()/1000
@@ -31,6 +35,7 @@ export default class BatchApp {
 
     public onCalendarCreated(){
     }
+
     public end() {
         const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
         this.stop();
