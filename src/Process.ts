@@ -76,9 +76,13 @@ const properties = PropertiesService.getScriptProperties().getProperties();
 for (const key in properties) {
     if (properties.hasOwnProperty(key)) {
         const property = (properties as { [key: string]: any })[key];
-        try {
-            process.env[key] = JSON.parse(property);
-        } catch (e) {
+        if(property[0] === '{' || property[0] === '[') {
+            try {
+                process.env[key] = JSON.parse(property);
+            } catch (e) {
+                process.env[key] = property;
+            }
+        } else {
             process.env[key] = property;
         }
     }
