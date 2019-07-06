@@ -13,6 +13,10 @@ export default class BatchApp {
         this.updated_at = UPDATED_AT && typeof (UPDATED_AT) === 'string' ? new Date(UPDATED_AT) : new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate(), this.now.getHours(), this.now.getMinutes() - this.interval);
     }
 
+    public start(){
+        this.now = new Date();
+    }
+
     public on( callback: (from: Date, to: Date) => any){
         return callback(this.updated_at, this.now);
     }
@@ -38,6 +42,7 @@ export default class BatchApp {
 
     public end() {
         const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
+        console.log(`[CREATE TRIGGER] - ${newTrigger}`)
         this.stop();
         process.env['TRIGGER_ID'] = newTrigger;
         process.env['BATCH_UPDATED_AT'] = this.now.toISOString();
@@ -46,7 +51,9 @@ export default class BatchApp {
 
     public stop(){
         ScriptApp.getProjectTriggers().some(trigger => {
-            if (trigger.getUniqueId() === process.env['TRIGGER_ID']) {
+            const triggerId = trigger.getUniqueId();
+            if (triggerId === process.env['TRIGGER_ID']) {
+                console.log(`[DELETE TRIGGER] - ${triggerId}`);
                 ScriptApp.deleteTrigger(trigger);
                 return true;
             }
