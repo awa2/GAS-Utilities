@@ -1,6 +1,6 @@
 {
   "name": "@ts-module-for-gas/gas-utilities",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Google Apps Script utility modules for developing with TypeScript",
   "main": "./src/index.ts",
   "directories": {
