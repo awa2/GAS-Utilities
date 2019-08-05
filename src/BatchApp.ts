@@ -37,20 +37,32 @@ export default class BatchApp {
         return rets.length;
     }
 
-    public onCalendarCreated(){
-    }
+    // public onCalendarCreated(){
+    // }
 
     public end() {
-        const newTrigger = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
-        // console.log(`[CREATE TRIGGER] - ${newTrigger}`)
+        const newTriggerId = this.createNextTrigger();
         this.stop();
-        process.env['TRIGGER_ID'] = newTrigger;
+        process.env['TRIGGER_ID'] = newTriggerId;
         process.env['BATCH_UPDATED_AT'] = this.now.toISOString();
         process.save();
     }
 
     public stop(){
-        ScriptApp.getProjectTriggers().some(trigger => {
+        const isSuccess = this.deleteCurrentTrigger();
+        if(isSuccess){
+            return true;
+        } else {
+            throw 'No trigger is matched'
+        }
+    }
+
+    public createNextTrigger(){
+        const newTriggerId = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
+        return newTriggerId;
+    }
+    public deleteCurrentTrigger(){
+        return ScriptApp.getProjectTriggers().some(trigger => {
             const triggerId = trigger.getUniqueId();
             if (triggerId === process.env['TRIGGER_ID']) {
                 // console.log(`[DELETE TRIGGER] - ${triggerId}`);
