@@ -3,14 +3,14 @@ import { md5sum } from './Hash';
 
 export default class BatchApp {
     public now = new Date();
-    public updated_at: Date;
+    public last_completed_at: Date;
     public interval: number;
     private functionName: string;
     constructor(functionName: string, interval?: number) {
         this.functionName = functionName;
         this.interval = interval ? interval : 5;
-        const UPDATED_AT = process.env['BATCH_UPDATED_AT']
-        this.updated_at = UPDATED_AT && typeof (UPDATED_AT) === 'string' ? new Date(UPDATED_AT) : new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate(), this.now.getHours(), this.now.getMinutes() - this.interval);
+        const COMPLETED_AT = process.env['BATCH_COMPLETED_AT']
+        this.last_completed_at = COMPLETED_AT && typeof (COMPLETED_AT) === 'string' ? new Date(COMPLETED_AT) : new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate(), this.now.getHours(), this.now.getMinutes() - this.interval);
     }
 
     public start(){
@@ -18,18 +18,18 @@ export default class BatchApp {
     }
 
     public on( callback: (from: Date, to: Date) => any){
-        return callback(this.updated_at, this.now);
+        return callback(this.last_completed_at, this.now);
     }
 
     public onGmailReceived(search: string, callback: (latestMessage: GoogleAppsScript.Gmail.GmailMessage) => any) {
         const conditionKey = md5sum(search);
-        const after = this.updated_at.valueOf()/1000
+        const after = this.last_completed_at.valueOf()/1000
 
         const Threads = GmailApp.search(`${search} after:${after}`);
         const rets = Threads.map( Thread => {
             const Messages = Thread.getMessages();
             return Messages.map( Message => {
-                if( this.updated_at < Message.getDate()){
+                if( this.last_completed_at < Message.getDate()){
                     return callback(Message);
                 }
             })
@@ -41,10 +41,15 @@ export default class BatchApp {
     // }
 
     public end() {
-        const newTriggerId = this.createNextTrigger();
-        this.stop();
-        process.env['TRIGGER_ID'] = newTriggerId;
-        process.env['BATCH_UPDATED_AT'] = this.now.toISOString();
+        try {
+            this.stop();
+        } catch (error) {
+            console.info('No trigger is matched so any trigger is not deleted');
+        }
+        this.createNextTrigger();
+
+        // Update time that batch completed
+        process.env['BATCH_COMPLETED_AT'] = this.now.toISOString();
         process.save();
     }
 
@@ -59,6 +64,7 @@ export default class BatchApp {
 
     public createNextTrigger(){
         const newTriggerId = ScriptApp.newTrigger(this.functionName).timeBased().after(this.interval * 60 * 1000).create().getUniqueId();
+        process.env['TRIGGER_ID'] = newTriggerId;
         return newTriggerId;
     }
     public deleteCurrentTrigger(){
