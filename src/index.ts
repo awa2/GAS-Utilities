@@ -4,6 +4,7 @@ import { SubmitEvent } from './SubmitEvent';
 import EventObject from './types/EventObject';
 import ConfigTemplate from './Config';
 import { md5sum, sha1sum, sha256sum, sha384sum, sha512sum } from './Hash';
+import { CalendarEvent } from './types/CalendarEvent';
 import BatchApp from './BatchApp';
 
 export { AutoFoldering }
@@ -13,4 +14,5 @@ export { EventObject }
 export { process }
 export { ConfigTemplate }
 export { md5sum, sha1sum, sha256sum, sha384sum, sha512sum }
+export { CalendarEvent }
 export { BatchApp }
