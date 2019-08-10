@@ -107,7 +107,7 @@ export default class BatchApp {
     }
 }
 
-interface CalendarEvent {
+export interface CalendarEvent {
     kind: 'calendar#event',
     etag: string,
     id: string,
